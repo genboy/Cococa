@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="description" content="Collect and combine cards ">
+  <meta name="keywords" content="card, card collect, card collection, card search, combine cards, deck, deck builder">
+  <meta name="author" content="genboy">
+  <meta name="copyright" content="genboy 2022">
+
+  <meta name="robots" content="index, follow">
+  <meta name="googlebot" content="index, follow">
+
+  <title>Cococa</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    #listing {}
+
+    #listing li {
+      position: relative;
+      width: 320px;
+
+    }
+
+    #listing li a h3 {}
+
+    #listing li a .imagebox {
+      display: none;
+    }
+
+    #listing li a:hover .imagebox {
+      display: block;
+      position: absolute;
+      top: -30px;
+      right: 10px;
+      z-index: 99;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="main">
+    <div id="loader"><span>Loading</span></div>
+  </div>
+  <script>
+    /*
+https://docs.magicthegathering.io/
+https://github.com/mtgjson/mtgjson
+https://mtgjson.com/api/v5/
+
+https://mtgjson.com/downloads/all-files/#compiledlist
+
+
+https://www.mtggoldfish.com/
+https://github.com/NickLediet/goldfish-scraper
+
+
+https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Factory
+*/
+
+
+    var source = 'https://mtgjson.com/api/v5/SetList.json'; //'source/AllPrintings.json'; // 'https://mtgjson.com/api/v5/AllIdentifiers.json'; //
+
+    async function loadJSON(source) {
+
+      fetch(source)
+        .then(r => r.json().then(data => ({
+          status: r.status,
+          body: data
+        })))
+        .then(obj => appendData(obj));
+
+    }
+
+    function appendData(data) {
+      console.log(data);
+    }
+
+    loadJSON(source);
+
+    /*
+    async function loadJSON(source){
+      const archive = await fetch(source)
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          appendData(data);
+        })
+        .catch(function (err) {
+          console.log(err);
+        });
+    }
+    function appendData(data){
+      console.log(data);
+    }
+    */
+    /*
+    async function loadJSON(src){
+      fetch(src)
+      .then(r =>  r.json().then(data => ({status: r.status, body: data})))
+      .then(obj => cardDisplay(obj)); //console.log(obj));
+    }
+
+    function cardDisplay(json) {
+
+      var jsondata = json.body.data;
+
+      var datalist = '<ul id="listing">';
+
+      for (var c = 0; c < jsondata.length; c++) {
+        datalist += '<li><a href="">';
+        datalist += '<h3>' + jsondata[c].number + '. ' + jsondata[c].name + '</h3>';
+        datalist += '<ul class="meta"><li>Power: ' + jsondata[c].power + '</li></ul>';
+    		//datalist += '<div class="imagebox"><img src="'+jsondata[c].imageUrl+'"  width="180" height="auto" /></div>';
+        datalist += '</a></li>';
+      }
+      datalist += '</ul>';
+
+    	//let html = '<div>Showing '+c+' cards</div>' + datalist;
+      document.getElementById('main').innerHTML = '<div>Showing '+c+' cards</div>' + datalist;
+
+
+      console.log(jsondata);
+    }
+
+    loadJSON(source);
+    */
+
+    /*
+
+    var source = 'source/AllPrintings.json';  // 'https://mtgjson.com/api/v5/AllIdentifiers.json'; //
+
+    async function fetchArchiveJSON() {
+      const response = await fetch(source);
+      const items = await response.json();
+      return items;
+    }
+
+    fetchArchiveJSON().then(items => {
+      console.log(items); // fetched
+      document.getElementById('loader').style="display:none;";
+    });
+
+    */
+
+
+    /*
+    fetch(source)
+    .then(r =>  r.json().then(data => ({status: r.status, body: data})))
+    .then(obj => cardDisplay(obj)); //console.log(obj));
+
+
+    function cardDisplay(jsondata) {
+      console.log(jsondata);
+    }
+    */
+
+    /*
+    let promises = [];
+    let amount = 5;
+    let datalist = '';
+    let count = 0;
+
+    for (let i = 1; i <= amount; i++) {
+      promises.push(fetch(`https://api.magicthegathering.io/v1/cards/?page=${i}`));
+    }
+
+    const allData = Promise.all(promises)
+    .then((responses) => responses.map(r => r.json()));
+
+    // attach then() handler to the allData Promise
+    allData.then((res) => pageList( res ));
+
+    async function pageList(json) {
+      var tot = json.length;
+
+      for (var c = 0; c < tot; c++) {
+        var m = json[c];
+        let data = Promise.resolve(m);
+        data.then((obj) => cardDisplay( obj ));
+      }
+
+      loader();
+
+    }
+
+    async function cardDisplay(obj) {
+
+      var jsondata = obj.cards;
+
+      for (var c = 0; c < jsondata.length; c++) {
+        datalist += '<li><a href="">';
+        datalist += '<h3>' + jsondata[c].number + '. ' + jsondata[c].name + '</h3>';
+        datalist += '<ul class="meta"><li>Power: ' + jsondata[c].power + '</li></ul>';
+    		datalist += '<div class="imagebox"><img src="'+jsondata[c].imageUrl+'"  width="180" height="auto" /></div>';
+        datalist += '</a></li>';
+        count++;
+        //document.getElementById("main").innerHTML += datalist;
+
+      }
+      console.log(obj.cards);
+    }
+
+    function loader(){
+    	if( count/100 < amount){
+        setTimeout(function(){
+    			loader();
+        },3000);
+      }else{
+      	document.getElementById("main").innerHTML = count;
+      	document.getElementById("main").innerHTML += datalist;
+      }
+    }
+
+    */
+
+
+    /*
+var pages = [];
+
+async function getAllMagicCards(){
+
+  var url = 'https://api.magicthegathering.io';
+
+  for(p=0;p<999;p++){
+
+    var source = url + '/v1/cards/?page='+p;
+
+    fetch(source)
+    .then(r =>  r.json().then(data => ({status: r.status, body: data})))
+    .then(obj => addList(obj)); //console.log(obj));
+  }
+
+  setTimeout(function(){
+    document.getElementById('main').innerHTML = pages;
+  }, 600 );
+
+}
+
+async function addList(data){
+  	var jsondata = data.body.cards;
+    if( !jsondata){
+      return;
+    }
+    if( jsondata.length > 0 ){
+        for (var c = 0; c < jsondata.length; c++) {
+          pages.push(jsondata[c]);
+        }
+    }else{
+      return;
+    }
+}
+
+getAllMagicCards();
+      */
+
+
+    /*
+async function loadMAgicSource(page = false) {
+var url = 'https://api.magicthegathering.io';
+if(!page){
+	let page = 1;
+}
+var source = url + '/v1/cards/?page='+page;
+
+fetch(source)
+.then(r =>  r.json().then(data => ({status: r.status, body: data})))
+.then(obj => cardDisplay(obj)); //console.log(obj));
+}
+
+function cardDisplay(json) {
+	var jsondata = json.body.cards;
+  var datalist = '<ul id="listing">';
+
+  for (var c = 0; c < jsondata.length; c++) {
+    datalist += '<li><a href="">';
+    datalist += '<h3>' + jsondata[c].number + '. ' + jsondata[c].name + '</h3>';
+    datalist += '<ul class="meta"><li>Power: ' + jsondata[c].power + '</li></ul>';
+		datalist += '<div class="imagebox"><img src="'+jsondata[c].imageUrl+'"  width="180" height="auto" /></div>';
+    datalist += '</a></li>';
+  }
+  datalist += '</ul>';
+
+	//let html = '<div>Showing '+c+' cards</div>' + datalist;
+  document.getElementById('main').innerHTML = '<div>Showing '+c+' cards</div>' + datalist;
+	console.log(jsondata);
+
+}
+
+loadMAgicSource();
+*/
+  </script>
+  </div>
+</body>
+
+</html>
