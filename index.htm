@@ -85,23 +85,8 @@
     <div id="cardlist"></div>
   </div>
   <script>
-    /*
-https://docs.magicthegathering.io/
-https://github.com/mtgjson/mtgjson
-https://mtgjson.com/api/v5/
-
-https://mtgjson.com/downloads/all-files/#compiledlist
 
 
-https://www.mtggoldfish.com/
-https://github.com/NickLediet/goldfish-scraper
-
-
-https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Factory
-*/
-
-
-    //'source/AllPrintings.json'; // 'https://mtgjson.com/api/v5/AllIdentifiers.json'; //
     var source = 'https://mtgjson.com/api/v5/SetList.json';
     var sets = [];
     var cards = [];
@@ -167,11 +152,9 @@ https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Fact
         jsondata[c].imageUrl = 'https://api.scryfall.com/cards/'+jsondata[c].identifiers["scryfallId"]+'?format=image';
         cards.push(jsondata[c]);
         count++;
-        //document.getElementById("main").innerHTML += datalist;
         document.getElementById("loader").innerHTML = count +' cards loaded';
 
       }
-      //console.log(jsondata);
     }
 
     function displaySetSelect(list){
@@ -185,7 +168,6 @@ https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Fact
         menu += '<option class="set" value="'+list[c].code+'">';
         menu += list[c].name;
         menu += '</option>';
-        //document.getElementById("main").innerHTML += datalist;
       }
 
       menu += '</select>';
@@ -210,10 +192,8 @@ https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Fact
         scrollall = false;
         document.getElementById("cardlist").innerHTML = '';
 
-        // cards .. setCode
-        //https://awik.io/find-object-array-certain-property-value-javascript/
-        //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter
         const list = cards.filter(element => element.setCode === uid);
+
         document.getElementById("infobar").innerHTML = 'Total '+list.length+' cards';
         let sethtml = '';
         for (var c = 0; c < list.length; c++) {
@@ -272,9 +252,6 @@ https://www.cardmarket.com/en/Magic/Products/Search?searchString=Mishra%27s+Fact
         displayCards(cards);
       }
     });
-
-
-
 
   </script>
   </div>
