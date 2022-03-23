@@ -11,7 +11,7 @@
   <meta name="robots" content="index, follow">
   <meta name="googlebot" content="index, follow">
 
-  <title>Pokemon TCG cards</title>
+  <title>MTG cards</title>
   <style>
     * {
       margin: 0;
@@ -87,11 +87,10 @@
   <script>
 
 
-    var source = 'https://api.pokemontcg.io/v2/sets';
+    var source = 'https://mtgjson.com/api/v5/SetList.json';
     var sets = [];
     var cards = [];
     var promises = [];
-    //var missing = []; // to re-fetch silently
     var datalist = '';
     var count = 0;
     var show = 0;
@@ -118,26 +117,22 @@
       jsondata.sort((a, b) => (a.releaseDate < b.releaseDate) ? 1 : -1);
 
       for (var d = 0; d < jsondata.length; d++) {
-
         sets.push(jsondata[d]);
-        let src = fetch( 'https://api.pokemontcg.io/v2/cards?q=set.id:'+jsondata[d].id );
+        let src = fetch('https://mtgjson.com/api/v5/'+jsondata[d].code+'.json');
         await src;
         promises.push(src);
-        document.getElementById("loader").innerHTML = d +' sets loaded..';
 
+        document.getElementById("loader").innerHTML = d +' sets loaded..';
       }
 
       document.getElementById("loader").innerHTML = promises.length +' sets, loading card data..';
 
-        const allData = Promise.all(promises)
-          .then((responses) => responses.map(r => r.json()));
+      const allData = Promise.all(promises)
+        .then((responses) => responses.map(r => r.json()));
 
-        allData.then((res) => gatherData(res));
+      allData.then((res) => gatherData(res));
 
-        //await Promise.all(promises).then((responses) => responses.map(r => r.json())).then((res) => gatherData(res));
     }
-
-
 
     function gatherData(data) {
 
@@ -153,14 +148,14 @@
 
     async function cardBundle(obj) {
 
-      var jsondata = obj.data; //.cards;
+      var jsondata = obj.data.cards;
 
       for (var c = 0; c < jsondata.length; c++) {
 
-        //jsondata[c].imageUrl = // or use .images.small
+        jsondata[c].imageUrl = 'https://api.scryfall.com/cards/'+jsondata[c].identifiers["scryfallId"]+'?format=image';
         cards.push(jsondata[c]);
         count++;
-        document.getElementById("loader").innerHTML = count +' cards loaded';
+        document.getElementById("loader").innerHTML = promises.length +' sets loaded<br />'+ count +' cards loaded';
 
       }
     }
@@ -173,7 +168,7 @@
 
       for (var c = 0; c < list.length; c++) {
 
-        menu += '<option class="set" value="'+list[c].id+'">';
+        menu += '<option class="set" value="'+list[c].code+'">';
         menu += list[c].name;
         menu += '</option>';
       }
@@ -200,7 +195,7 @@
         scrollall = false;
         document.getElementById("cardlist").innerHTML = '';
 
-        const list = cards.filter(element => element.set.id === uid);
+        const list = cards.filter(element => element.setCode === uid);
 
         document.getElementById("infobar").innerHTML = 'Total '+list.length+' cards';
         let sethtml = '';
@@ -230,9 +225,9 @@
     function listcardHTML(obj){
 
       html = '<li class="card">';
-      html += '<h3>' + obj.id + '. ' + obj.name + '</h3>';
-      html += '<ul class="meta"><li>Type: ' + obj.types + '</li><li>Level: ' + obj.level + '</li><li>HP: ' + obj.hp + '</li></ul>';
-      html += '<div class="imagebox"><img src="'+obj.images.small+'"  width="480" height="auto" /></div>';
+      html += '<h3>' + obj.number + '. ' + obj.name + '</h3>';
+      html += '<ul class="meta"><li>Type: ' + obj.types[0] + '</li><li>Power: ' + obj.power + '</li><li>Manacost: ' + obj.manaCost + '</li></ul>';
+      html += '<div class="imagebox"><img src="'+obj.imageUrl+'"  width="480" height="auto" /></div>';
       html += '</li>';
       return html;
 
